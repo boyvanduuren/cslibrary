@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 struct node {
 	int data;
@@ -47,19 +48,19 @@ struct node* BuildOneTwoThree() {
 	return head;
 }
 
-struct node* GetN(struct node* head, int n) {
+struct node* GetNth(struct node* head, int n) {
 	struct node* current = head;
 	int i;
 
 	for(i = 0; i < n; i++) {
-		if(current->next == NULL) return current;
+		if(current->next == NULL) assert(i == n);
 		current = current->next;
 	}
 	return current;
 }
 
 void Insert(struct node* head, int position, int data) {
-	struct node* before = GetN(head, position);
+	struct node* before = GetNth(head, position);
 	struct node* after = before->next;
 	struct node* newNode = malloc(sizeof(struct node));
 
@@ -74,9 +75,48 @@ void TraverseList(struct node* head) {
 		printf("%d\n", current->data);
 }
 
+int Count(struct node* head, int searchFor) {
+	struct node* current;
+	int count = 0;
+
+	for(current = head; current != NULL; current = current->next)
+		if(current->data == searchFor) count++;
+
+	return count;
+}
+
+void DeleteList(struct node** head) {
+	struct node* current = *head;
+	struct node* deleteNode;
+
+	while(current != NULL) {
+		deleteNode = current;
+		current = current->next;
+		free(deleteNode);
+	}
+	*head = current;
+}
+
+int Pop(struct node** head) {
+	struct node* current = *head;
+	int popped;
+
+	*head = current->next;
+	popped = current->data;
+	free(current);
+
+	return popped;
+}
+
 int main() {
-	struct node* head = BuildDummy();
-	TraverseList(head);
+	struct node* list = BuildOneTwoThree();
+	int a, b, c;
+
+	a = Pop(&list);
+	b = Pop(&list);
+	c = Pop(&list);
+
+	printf("%d %d %d\n", a, b, c);
 
 	return 0;
 }
