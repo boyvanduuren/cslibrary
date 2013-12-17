@@ -108,15 +108,32 @@ int Pop(struct node** head) {
 	return popped;
 }
 
+void InsertNth(struct node** head, int index, int data) {
+	struct node* current = *head;
+	int i;
+
+	assert(index >= 0);	
+	
+	if(index == 0) {
+		Push(&(*head), data);
+		return;
+	}
+
+	for(i = 0; i < index - 1; i++) {
+		current = current->next;
+		assert(current != NULL);
+	}
+
+	Push(&(current->next), data);
+}
+
 int main() {
-	struct node* list = BuildOneTwoThree();
-	int a, b, c;
+	struct node* list = NULL;
 
-	a = Pop(&list);
-	b = Pop(&list);
-	c = Pop(&list);
-
-	printf("%d %d %d\n", a, b, c);
+	InsertNth(&list, 0, 1);
+	InsertNth(&list, 1, 2);
+	InsertNth(&list, 2, 3);
+	TraverseList(list);
 
 	return 0;
 }
