@@ -167,19 +167,28 @@ void SortedInsert(struct node** headRef, struct node* newNode) {
 	}
 }
 
+void InsertSort(struct node **headRef) {
+	struct node* sortedList = NULL;
+	struct node* current;
+	struct node* newNode;
+
+	for(current = *headRef; current != NULL; current = current->next) {
+		newNode = malloc(sizeof(struct node));
+		newNode->data = current->data;
+		SortedInsert(&sortedList, newNode);;
+	}
+	DeleteList(&(*headRef));
+	*headRef = sortedList;
+}
+
 int main() {
 	struct node* list = NULL;
-	struct node* new1 = malloc(sizeof(struct node));
-	struct node* new2 = malloc(sizeof(struct node));
 
-	Append(&list, 1);
-	Append(&list, 3);
-	Append(&list, 5);
+	Append(&list, 56);
+	Append(&list, 2);
+	Append(&list, 9);
 
-	new1->data = 2;
-
-	SortedInsert(&list, new1);
-
+	InsertSort(&list);
 	TraverseList(list);
 
 	return 0;
