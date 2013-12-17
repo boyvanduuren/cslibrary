@@ -199,15 +199,34 @@ void InsertSort(struct node** headRef) {
 	*headRef = sortedList;
 }
 
+void AppendList(struct node** aRef, struct node** bRef) {
+	struct node* aRefLocal = *aRef;
+
+	// Exception for empty aRef, just point it to bRef
+	if(*aRef == NULL) {
+		*aRef = *bRef;
+	}
+	else {
+		// Find last node in aRef
+		while(aRefLocal->next != NULL)
+			aRefLocal = aRefLocal->next;
+
+		aRefLocal->next = *bRef;
+		*bRef = NULL;
+	}
+}
+
 int main() {
-	struct node* list = NULL;
+	struct node* a = NULL;
+	struct node* b = NULL;
 
-	Append(&list, 56);
-	Append(&list, 2);
-	Append(&list, 9);
+	Append(&a, 1);
+	Append(&a, 2);
+	Append(&b, 3);
+	Append(&b, 4);
 
-	InsertSort(&list);
-	TraverseList(list);
+	AppendList(&a, &b);
+	TraverseList(a);
 
 	return 0;
 }
