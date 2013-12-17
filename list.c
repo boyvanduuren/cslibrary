@@ -113,7 +113,7 @@ void InsertNth(struct node** head, int index, int data) {
 	int i;
 
 	assert(index >= 0);	
-	
+
 	if(index == 0) {
 		Push(&(*head), data);
 		return;
@@ -127,12 +127,59 @@ void InsertNth(struct node** head, int index, int data) {
 	Push(&(current->next), data);
 }
 
+void long_SortedInsert(struct node** head, struct node* newNode) {
+	struct node* current;
+	newNode->next = NULL;
+
+	// Will newNode replace node 0?
+	if(current == NULL || newNode->data <= (*head)->data) {
+		newNode->next = *head;
+		*head = newNode;
+		return;
+	}
+
+	// This code will run if newNode doesn't replace node 0
+	for(current = *head; current->next != NULL; current = current->next) {
+		if(newNode->data > current->data && newNode->data <= (current->next)->data) {
+			newNode->next = current->next;
+			current->next = newNode;
+			break;
+		}
+	}
+
+	// newNode->data > list-1, so place it at the tail
+	if(newNode->data > current->data) current->next = newNode;
+}
+
+void SortedInsert(struct node** headRef, struct node* newNode) {
+	struct node* current = *headRef;
+
+	if(*headRef == NULL || newNode->data <= (*headRef)->data) {
+		newNode->next = *headRef;
+		*headRef = newNode;
+	}
+	else {
+		while(current->next != NULL && newNode->data > current->next->data) {
+			current = current->next;
+		}
+		newNode->next = current->next;
+		current->next = newNode;
+	}
+}
+
 int main() {
 	struct node* list = NULL;
+	struct node* new1 = malloc(sizeof(struct node));
+	struct node* new2 = malloc(sizeof(struct node));
 
-	InsertNth(&list, 0, 1);
-	InsertNth(&list, 1, 2);
-	InsertNth(&list, 2, 3);
+	Append(&list, 1);
+	Append(&list, 3);
+	Append(&list, 5);
+
+	new1->data = 2;
+
+	SortedInsert(&list, new1);
+
 	TraverseList(list);
 
 	return 0;
