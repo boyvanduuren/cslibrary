@@ -216,17 +216,50 @@ void AppendList(struct node** aRef, struct node** bRef) {
 	}
 }
 
+// FrontBackSplit using a slow and fast pointer
+// where to split the list
+void FrontBackSplit(struct node* source,
+				struct node** frontRef, struct node** backRef) {
+	struct node* slowPtr = source;
+	struct node* fastPtr = source;
+
+	while(fastPtr->next != NULL) {
+		if(fastPtr->next->next != NULL) {
+			fastPtr = fastPtr->next->next;
+			slowPtr = slowPtr->next;
+		}
+		else if(fastPtr->next->next == NULL)
+			fastPtr = fastPtr->next;
+	}
+
+	// Special case for list of 1
+	if(fastPtr->data == 1) {
+		*frontRef = source;
+		*backRef = NULL;
+	}
+	else {
+		*frontRef = source;
+		*backRef = slowPtr->next;
+		// Split list in half by pointing slowPtr->next to NULL
+		slowPtr->next = NULL;
+	}
+
+}
+
 int main() {
-	struct node* a = NULL;
-	struct node* b = NULL;
+	struct node* list = NULL;
+	struct node* front;
+	struct node* back;
+	int i;
 
-	Append(&a, 1);
-	Append(&a, 2);
-	Append(&b, 3);
-	Append(&b, 4);
+	for(i = 1; i <= 4; i++)
+		Append(&list, i);
 
-	AppendList(&a, &b);
-	TraverseList(a);
+	FrontBackSplit(list, &front, &back);
+	printf("TraverseList(front)\n");
+	TraverseList(front);
+	printf("\n\nTraverseList(back)\n");
+	TraverseList(back);
 
 	return 0;
 }
