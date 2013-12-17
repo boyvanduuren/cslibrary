@@ -217,7 +217,7 @@ void AppendList(struct node** aRef, struct node** bRef) {
 }
 
 // FrontBackSplit using a slow and fast pointer
-// where to split the list
+// to determine where to split the list
 void FrontBackSplit(struct node* source,
 				struct node** frontRef, struct node** backRef) {
 	struct node* slowPtr = source;
