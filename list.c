@@ -167,7 +167,10 @@ void SortedInsert(struct node** headRef, struct node* newNode) {
 	}
 }
 
-void InsertSort(struct node **headRef) {
+// I wrote this one my self. Because of the malloc()
+// in the for loop, this one needs twice as many
+// memory allocations as the example solution
+void UnoptimizedInsertSort(struct node **headRef) {
 	struct node* sortedList = NULL;
 	struct node* current;
 	struct node* newNode;
@@ -178,6 +181,21 @@ void InsertSort(struct node **headRef) {
 		SortedInsert(&sortedList, newNode);;
 	}
 	DeleteList(&(*headRef));
+	*headRef = sortedList;
+}
+
+// Example solution from the book
+void InsertSort(struct node** headRef) {
+	struct node* sortedList = NULL;
+	struct node* current = *headRef;
+	struct node* next;
+
+	while(current != NULL) {
+		next = current->next;
+		SortedInsert(&sortedList, current);
+		current = next;
+	}
+
 	*headRef = sortedList;
 }
 
