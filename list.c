@@ -167,7 +167,10 @@ void SortedInsert(struct node** headRef, struct node* newNode) {
 	}
 }
 
-void InsertSort(struct node **headRef) {
+// I wrote this one my self. Because of the malloc()
+// in the for loop, this one needs twice as many
+// memory allocations as the example solution
+void UnoptimizedInsertSort(struct node **headRef) {
 	struct node* sortedList = NULL;
 	struct node* current;
 	struct node* newNode;
@@ -181,15 +184,82 @@ void InsertSort(struct node **headRef) {
 	*headRef = sortedList;
 }
 
+// Example solution from the book
+void InsertSort(struct node** headRef) {
+	struct node* sortedList = NULL;
+	struct node* current = *headRef;
+	struct node* next;
+
+	while(current != NULL) {
+		next = current->next;
+		SortedInsert(&sortedList, current);
+		current = next;
+	}
+
+	*headRef = sortedList;
+}
+
+void AppendList(struct node** aRef, struct node** bRef) {
+	struct node* aRefLocal = *aRef;
+
+	// Exception for empty aRef, just point it to bRef
+	if(*aRef == NULL) {
+		*aRef = *bRef;
+	}
+	else {
+		// Find last node in aRef
+		while(aRefLocal->next != NULL)
+			aRefLocal = aRefLocal->next;
+
+		aRefLocal->next = *bRef;
+		*bRef = NULL;
+	}
+}
+
+// FrontBackSplit using a slow and fast pointer
+// to determine where to split the list
+void FrontBackSplit(struct node* source,
+				struct node** frontRef, struct node** backRef) {
+	struct node* slowPtr = source;
+	struct node* fastPtr = source;
+
+	while(fastPtr->next != NULL) {
+		if(fastPtr->next->next != NULL) {
+			fastPtr = fastPtr->next->next;
+			slowPtr = slowPtr->next;
+		}
+		else if(fastPtr->next->next == NULL)
+			fastPtr = fastPtr->next;
+	}
+
+	// Special case for list of 1
+	if(fastPtr->data == 1) {
+		*frontRef = source;
+		*backRef = NULL;
+	}
+	else {
+		*frontRef = source;
+		*backRef = slowPtr->next;
+		// Split list in half by pointing slowPtr->next to NULL
+		slowPtr->next = NULL;
+	}
+
+}
+
 int main() {
 	struct node* list = NULL;
+	struct node* front;
+	struct node* back;
+	int i;
 
-	Append(&list, 56);
-	Append(&list, 2);
-	Append(&list, 9);
+	for(i = 1; i <= 4; i++)
+		Append(&list, i);
 
-	InsertSort(&list);
-	TraverseList(list);
+	FrontBackSplit(list, &front, &back);
+	printf("TraverseList(front)\n");
+	TraverseList(front);
+	printf("\n\nTraverseList(back)\n");
+	TraverseList(back);
 
 	return 0;
 }
