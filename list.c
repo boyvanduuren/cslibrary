@@ -246,20 +246,39 @@ void FrontBackSplit(struct node* source,
 
 }
 
+// Remove duplicates from a sorted list
+void RemoveDuplicates(struct node* head) {
+	struct node* current = head;
+	struct node* previous = NULL;
+
+	while(current) {
+		if(previous == NULL) {
+			previous = current;
+		}
+		else {
+			if(previous->data == current->data)
+				previous->next = current->next;
+			else
+				previous = current;
+
+			current = current->next;
+		}
+	}
+}
+
 int main() {
 	struct node* list = NULL;
-	struct node* front;
-	struct node* back;
 	int i;
 
-	for(i = 1; i <= 4; i++)
+	for(i = 1; i <= 4; i++) {
 		Append(&list, i);
+		Append(&list, i);
+		Append(&list, i);
+	}
+		Append(&list, 4);
 
-	FrontBackSplit(list, &front, &back);
-	printf("TraverseList(front)\n");
-	TraverseList(front);
-	printf("\n\nTraverseList(back)\n");
-	TraverseList(back);
+	RemoveDuplicates(list);
+	TraverseList(list);
 
 	return 0;
 }
