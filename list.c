@@ -266,19 +266,21 @@ void RemoveDuplicates(struct node* head) {
 	}
 }
 
+void MoveNode(struct node** destRef, struct node** sourceRef) {
+	assert(*sourceRef != NULL);
+
+	struct node* next = (*sourceRef)->next;
+	(*sourceRef)->next = *destRef;
+	*destRef = *sourceRef;
+	*sourceRef = next;
+}
+
 int main() {
-	struct node* list = NULL;
-	int i;
+	struct node* a = NULL;
+	struct node* b = BuildOneTwoThree();
 
-	for(i = 1; i <= 4; i++) {
-		Append(&list, i);
-		Append(&list, i);
-		Append(&list, i);
-	}
-		Append(&list, 4);
-
-	RemoveDuplicates(list);
-	TraverseList(list);
+	MoveNode(&a, &b);
+	TraverseList(a);
 
 	return 0;
 }
