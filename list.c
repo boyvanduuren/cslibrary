@@ -275,12 +275,50 @@ void MoveNode(struct node** destRef, struct node** sourceRef) {
 	*sourceRef = next;
 }
 
-int main() {
-	struct node* a = NULL;
-	struct node* b = BuildOneTwoThree();
+// My own solution to the AlternatingSplit problem
+void AlternatingSplit(struct node* source,
+				struct node** aRef, struct node** bRef) {
+	int count = 0;
 
-	MoveNode(&a, &b);
+	while(source) {
+		count++;
+		if(count % 2)
+			Append(&(*aRef), source->data);
+		else
+			Append(&(*bRef), source->data);
+
+		source = source->next;
+	}
+}
+
+// The PDF's solution, slightly rewritten
+void AlternatingSplitBook(struct node* source,
+				struct node** aRef, struct node** bRef) {
+	struct node* current = source;
+
+	while(current != NULL) {
+		MoveNode(&(*aRef), &current);
+		if(current != NULL)
+			MoveNode(&(*bRef), &current);
+	}
+
+}
+
+int main() {
+	struct node *list = NULL;
+	struct node *a = NULL;
+	struct node *b = NULL;
+	int i;
+
+	for(i = 1; i <= 6; i++)
+		Append(&list, i);
+
+
+	AlternatingSplitBook(list, &a, &b);
+	printf("a: \n");
 	TraverseList(a);
+	printf("b: \n");
+	TraverseList(b);
 
 	return 0;
 }
