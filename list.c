@@ -334,7 +334,6 @@ struct node* LongShuffleMerge(struct node* a, struct node* b) {
 struct node* ShuffleMerge(struct node* a, struct node* b) {
 	struct node dummy;
 	struct node* tail = &dummy;
-	int i;
 
 	dummy.next = NULL;
 
@@ -357,20 +356,46 @@ struct node* ShuffleMerge(struct node* a, struct node* b) {
 	return dummy.next;
 }
 
+struct node* SortedMerge(struct node* a, struct node* b) {
+	struct node dummy;
+	struct node *tail = &dummy;
+
+	dummy.next = NULL;
+
+	while (1) {
+		if (!a) {
+			tail->next = b;
+			break;
+		}
+		else if (!b) {
+			tail->next = a;
+			break;
+		}
+		else {
+			if (a->data < b->data)
+				MoveNode(&(tail->next), &a);
+			else if (b->data < a->data)
+				MoveNode(&(tail->next), &b);
+			tail = tail->next;
+		}
+	}
+	return dummy.next;
+}
+
 int main() {
 	struct node *a = NULL;
 	struct node *b = NULL;
 
 	Append(&a, 1);
-	Append(&a, 2);
 	Append(&a, 3);
+	Append(&a, 5);
 
-	Append(&b, 7);
-	Append(&b, 13);
-	Append(&b, 1);
+	Append(&b, 2);
+	Append(&b, 63);
+	Append(&b, 105);
 
 
-	struct node* list = ShuffleMerge(a, b);
+	struct node* list = SortedMerge(a, b);
 	TraverseList(list);
 
 	return 0;
