@@ -301,24 +301,77 @@ void AlternatingSplitBook(struct node* source,
 		if(current != NULL)
 			MoveNode(&(*bRef), &current);
 	}
+}
 
+struct node* LongShuffleMerge(struct node* a, struct node* b) {
+	struct node* current_a = a;
+	struct node* current_b = b;
+	struct node* list = NULL;
+        struct node* tail = NULL;
+
+	while(current_a) {
+		if (!tail) {
+			MoveNode(&list, &current_a);
+			tail = list;
+			if (current_b) {
+				MoveNode(&(tail->next), &current_b);
+				tail = tail->next;
+			}
+		}
+
+		if (tail) {
+			MoveNode(&(tail->next), &current_a);
+			tail = tail->next;
+			if(current_b) {
+				MoveNode(&(tail->next), &current_b);
+				tail = tail->next;
+			}
+		}
+	}
+	return list;
+}
+
+struct node* ShuffleMerge(struct node* a, struct node* b) {
+	struct node dummy;
+	struct node* tail = &dummy;
+	int i;
+
+	dummy.next = NULL;
+
+	
+	while (1) {
+		if (a) {
+			MoveNode(&(tail->next), &a);
+			tail = tail->next;
+		}
+		if (b) {
+			MoveNode(&(tail->next), &b);
+			tail = tail->next;
+		}
+		if (!b) {
+			tail->next = a;
+			break;
+		}
+	}
+
+	return dummy.next;
 }
 
 int main() {
-	struct node *list = NULL;
 	struct node *a = NULL;
 	struct node *b = NULL;
-	int i;
 
-	for(i = 1; i <= 6; i++)
-		Append(&list, i);
+	Append(&a, 1);
+	Append(&a, 2);
+	Append(&a, 3);
+
+	Append(&b, 7);
+	Append(&b, 13);
+	Append(&b, 1);
 
 
-	AlternatingSplitBook(list, &a, &b);
-	printf("a: \n");
-	TraverseList(a);
-	printf("b: \n");
-	TraverseList(b);
+	struct node* list = ShuffleMerge(a, b);
+	TraverseList(list);
 
 	return 0;
 }
