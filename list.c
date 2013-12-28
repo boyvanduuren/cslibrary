@@ -382,21 +382,37 @@ struct node* SortedMerge(struct node* a, struct node* b) {
 	return dummy.next;
 }
 
+void MergeSort(struct node** headRef) {
+	struct node* head = *headRef;
+	struct node* front;
+	struct node* back;
+
+	if (!head || !head->next)
+		return;
+
+	FrontBackSplit(*headRef, &front, &back);
+
+	MergeSort(&front);
+	MergeSort(&back);
+
+	*headRef = SortedMerge(front, back);
+}
+
 int main() {
 	struct node *a = NULL;
-	struct node *b = NULL;
 
 	Append(&a, 1);
 	Append(&a, 3);
 	Append(&a, 5);
+	Append(&a, 31);
+	Append(&a, 523);
+	Append(&a, 4385);
+	Append(&a, 6);
+	Append(&a, 7);
 
-	Append(&b, 2);
-	Append(&b, 63);
-	Append(&b, 105);
 
-
-	struct node* list = SortedMerge(a, b);
-	TraverseList(list);
+	MergeSort(&a);
+	TraverseList(a);
 
 	return 0;
 }
