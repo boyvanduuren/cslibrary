@@ -438,23 +438,22 @@ struct node* SortedIntersect(struct node* a, struct node* b) {
 	return dummy.next;
 }
 
+void Reverse(struct node** headRef) {
+	struct node* reverse = NULL;
+
+	while (*headRef)
+		MoveNode(&reverse, &(*headRef));
+	*headRef = reverse;
+}
+
 int main() {
-	struct node *a = NULL;
-	struct node *b = NULL;
+	struct node* list = BuildOneTwoThree();
+	Append(&list, 15);
+	Append(&list, 800);
+	Append(&list, 777);
 
-	Append(&a, 1);
-	Append(&a, 3);
-	Append(&a, 5);
-	Append(&a, 31);
-	Append(&a, 313);
-
-	Append(&b, 1);
-	Append(&b, 3);
-	Append(&b, 313);
-	Append(&b, 7771);
-
-	struct node* intersect = SortedIntersect(a, b);
-	TraverseList(intersect);
+	Reverse(&list);
+	TraverseList(list);
 
 	return 0;
 }
