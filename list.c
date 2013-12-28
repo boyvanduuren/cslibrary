@@ -446,13 +446,25 @@ void Reverse(struct node** headRef) {
 	*headRef = reverse;
 }
 
+void RecursiveReverse(struct node** headRef) {
+	struct node* first = *headRef;
+	struct node* rest = (*headRef)->next;
+
+	if (!rest)
+		return;
+
+	RecursiveReverse(&rest);
+
+	first->next->next = first;
+	first->next = NULL;
+
+	*headRef = rest;
+}
+
 int main() {
 	struct node* list = BuildOneTwoThree();
-	Append(&list, 15);
-	Append(&list, 800);
-	Append(&list, 777);
 
-	Reverse(&list);
+	RecursiveReverse(&list);
 	TraverseList(list);
 
 	return 0;
