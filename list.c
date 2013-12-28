@@ -398,21 +398,63 @@ void MergeSort(struct node** headRef) {
 	*headRef = SortedMerge(front, back);
 }
 
+// This was my first solution for the problem
+// It works, but doesn't traverse each list just once
+// which means it's not a good solution
+struct node* BadSortedIntersect(struct node* a, struct node* b) {
+	struct node* result = NULL;
+
+	while (a) {
+		while (b) {
+			if (a->data == b->data) {
+				Push(&result, a->data);
+				break;
+			}
+			b = b->next;
+		}
+		a = a->next;
+	}
+	return result;
+}
+
+struct node* SortedIntersect(struct node* a, struct node* b) {
+	struct node dummy;
+	struct node* tail = &dummy;
+
+	dummy.next = NULL;
+
+	while(a && b) {
+		if (a->data == b->data) {
+			Push(&(tail->next), a->data);
+			tail = tail->next;
+			a = a->next;
+			b = b->next;
+		}
+		else if (a->data < b->data)
+			a = a->next;
+		else if (b->data < a->data)
+			b = b->next;
+	}
+	return dummy.next;
+}
+
 int main() {
 	struct node *a = NULL;
+	struct node *b = NULL;
 
 	Append(&a, 1);
 	Append(&a, 3);
 	Append(&a, 5);
 	Append(&a, 31);
-	Append(&a, 523);
-	Append(&a, 4385);
-	Append(&a, 6);
-	Append(&a, 7);
+	Append(&a, 313);
 
+	Append(&b, 1);
+	Append(&b, 3);
+	Append(&b, 313);
+	Append(&b, 7771);
 
-	MergeSort(&a);
-	TraverseList(a);
+	struct node* intersect = SortedIntersect(a, b);
+	TraverseList(intersect);
 
 	return 0;
 }
