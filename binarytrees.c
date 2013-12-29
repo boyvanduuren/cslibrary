@@ -70,12 +70,26 @@ struct node* build123_c() {
     return root;
 }
 
+int size(struct node* node) {
+    static int count = 0;
+    if (!node) return 0;
+    else {
+        count++;
+        size(node->left);
+        size(node->right);
+    }
+    return count;
+}
+
 int main() {
     struct node* root = build123_c();
+    insert(root, 12);
+    insert(root, 0);
 
     printf("root->data: %d\nroot->left->data: %d\nroot->right->data: %d\n",
         root->data, root->left->data, root->right->data);
-//    if (lookup(root, 3)) printf("found!\n");
+
+    printf("size of tree: %d\n", size(root));
 
     return 0;
 }
