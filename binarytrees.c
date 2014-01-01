@@ -91,16 +91,27 @@ int maxDepth(struct node* node) {
     }
 }
 
+// Find the lowest value in an ordered binary tree
+int minValue(struct node* node) {
+    struct node* current = node;
+
+    while(current->left) {
+        current = current->left;
+    }
+
+    return current->data;
+}
+
 int main() {
     struct node* root = build123_c();
-    insert(root, 12);
-    insert(root, 0);
+    insert(root, -777);
 
     printf("root->data: %d\nroot->left->data: %d\nroot->right->data: %d\n",
         root->data, root->left->data, root->right->data);
 
     printf("size of tree: %d\n", size(root));
     printf("maxDepth of tree: %d\n", maxDepth(root));
+    printf("minValue of tree: %d\n", minValue(root));
 
     return 0;
 }
