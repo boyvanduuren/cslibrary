@@ -81,6 +81,16 @@ int size(struct node* node) {
     return count;
 }
 
+int maxDepth(struct node* node) {
+    if (!node) return 0;
+    else {
+        if (maxDepth(node->left) > maxDepth(node->right))
+            return maxDepth(node->left) + 1;
+        else
+            return maxDepth(node->right) + 1;
+    }
+}
+
 int main() {
     struct node* root = build123_c();
     insert(root, 12);
@@ -90,6 +100,7 @@ int main() {
         root->data, root->left->data, root->right->data);
 
     printf("size of tree: %d\n", size(root));
+    printf("maxDepth of tree: %d\n", maxDepth(root));
 
     return 0;
 }
