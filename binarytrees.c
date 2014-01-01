@@ -102,16 +102,29 @@ int minValue(struct node* node) {
     return current->data;
 }
 
-int main() {
-    struct node* root = build123_c();
-    insert(root, -777);
+// Given a binary search tree iterate over
+// all the nodes, printing them out in increasing order
+void printTree(struct node* node) {
+    if (!node) return;
+    else {
+        printTree(node->left);
+        printf("%d ", node->data);
+        printTree(node->right);
+    }
+}
 
-    printf("root->data: %d\nroot->left->data: %d\nroot->right->data: %d\n",
-        root->data, root->left->data, root->right->data);
+int main() {
+    struct node* root = NewNode(4);
+    insert(root, 2);
+    insert(root, 5);
+    insert(root, 1);
+    insert(root, 3);
 
     printf("size of tree: %d\n", size(root));
     printf("maxDepth of tree: %d\n", maxDepth(root));
     printf("minValue of tree: %d\n", minValue(root));
+    printTree(root);
+    printf("\n");
 
     return 0;
 }
