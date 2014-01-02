@@ -113,6 +113,19 @@ void printTree(struct node* node) {
     }
 }
 
+// Given a binary tree, print out the nodes of the tree
+// according to a bottom-up "postorder" traversel -- both
+// subtrees of a node are printed out completely before the node
+// itself is printed, and each left subtree is printed before the right
+void printPostorder(struct node* node) {
+    if (!node) return;
+    else {
+        printPostorder(node->left);
+        printPostorder(node->right);
+        printf("%d ", node->data);
+    }
+}
+
 int main() {
     struct node* root = NewNode(4);
     insert(root, 2);
@@ -124,6 +137,8 @@ int main() {
     printf("maxDepth of tree: %d\n", maxDepth(root));
     printf("minValue of tree: %d\n", minValue(root));
     printTree(root);
+    printf("\n");
+    printPostorder(root);
     printf("\n");
 
     return 0;
