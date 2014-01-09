@@ -126,6 +126,24 @@ void printPostorder(struct node* node) {
     }
 }
 
+// We'll define a "root-to-leaf path" to be a sequence of nodes
+// in a tree starting with the root node and proceeding downward
+// to a leaf (a node with no children). We'll say that an empty
+// tree contains no root-to-leaf paths.
+// For this problem, we will be concerned with the sum
+// of the values of such a path
+int hasPathSum(struct node* node, int sum) {
+    // Follow every node till we find a leaf node
+    // subtracting the value of each node from sum
+    if (!node->left && !node->right) {
+        if (sum - node->data == 0) return 1;
+        else return 0;
+    }
+
+    return (hasPathSum(node->left, sum - node->data) ||
+        hasPathSum(node->right, sum - node->data));
+}
+
 int main() {
     struct node* root = NewNode(4);
     insert(root, 2);
@@ -140,6 +158,7 @@ int main() {
     printf("\n");
     printPostorder(root);
     printf("\n");
+    if (hasPathSum(root, 9)) printf("Tree has a root-to-leaf path that sums to 9\n");
 
     return 0;
 }
