@@ -144,6 +144,31 @@ int hasPathSum(struct node* node, int sum) {
         hasPathSum(node->right, sum - node->data));
 }
 
+// Given a binary tree, print out all of its root-to-leaf paths as defined above
+// use this by calling printPaths(struct node* node)
+void printPathsRecur(struct node* node, int pathLen) {
+    int i;
+    static int path[1000];
+
+    if (!node) return;
+
+    path[pathLen] = node->data;
+    pathLen++;
+
+    if (!node->left && !node->right) {
+        for (i = 0; i < pathLen; i++)
+            printf("%d ", path[i]);
+        printf("\n");
+    }
+
+    printPathsRecur(node->left, pathLen);
+    printPathsRecur(node->right, pathLen);
+}
+
+void printPaths(struct node* node) {
+    printPathsRecur(node, 0);
+}
+
 int main() {
     struct node* root = NewNode(4);
     insert(root, 2);
@@ -154,11 +179,15 @@ int main() {
     printf("size of tree: %d\n", size(root));
     printf("maxDepth of tree: %d\n", maxDepth(root));
     printf("minValue of tree: %d\n", minValue(root));
+
     printTree(root);
     printf("\n");
+
     printPostorder(root);
     printf("\n");
+
     if (hasPathSum(root, 9)) printf("Tree has a root-to-leaf path that sums to 9\n");
+    printPaths(root);
 
     return 0;
 }
