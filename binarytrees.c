@@ -181,6 +181,23 @@ void mirror(struct node* node) {
     mirror(node->right);
 }
 
+void doubleTree(struct node* node) {
+    if (!node) return;
+
+    // Create new node, which is a copy of the current node
+    struct node* newNode = malloc(sizeof(struct node));
+    newNode->data = node->data;
+    newNode->left = node->left;
+    newNode->right = node->right;
+
+    // Point current node's ->left to newNode;
+    node->left = newNode;
+
+    // Recursively call function for both left and right branches
+    doubleTree(newNode->left);
+    doubleTree(newNode->right);
+}
+
 int main() {
     struct node* root = NewNode(4);
     insert(root, 2);
@@ -199,10 +216,6 @@ int main() {
     printf("\n");
 
     if (hasPathSum(root, 9)) printf("Tree has a root-to-leaf path that sums to 9\n");
-    printPaths(root);
-
-    printf("Paths after calling mirror:\n");
-    mirror(root);
     printPaths(root);
 
     return 0;
