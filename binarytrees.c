@@ -198,6 +198,31 @@ void doubleTree(struct node* node) {
     doubleTree(newNode->right);
 }
 
+int sameTree(struct node* a, struct node* b) {
+    // initial state is true
+    static int truth = 1;
+
+    // check if nodes are NULL, if so check the other
+    if (!a) {
+        if (b) truth = 0;
+        return truth;
+    }
+    else if (!b) {
+        if (a) truth = 0;
+        return truth;
+    }
+
+    // set truth to false if node data is not the same
+    if (a->data != b->data) truth = 0;
+
+    // recursively check the rest of the tree
+    sameTree(a->left, b->left);
+    sameTree(a->right, b->right);
+
+    // return truth
+    return truth;
+}
+
 int main() {
     struct node* root = NewNode(4);
     insert(root, 2);
