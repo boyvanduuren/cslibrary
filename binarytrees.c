@@ -169,6 +169,18 @@ void printPaths(struct node* node) {
     printPathsRecur(node, 0);
 }
 
+void mirror(struct node* node) {
+    if (!node) return;
+
+    struct node* tempNode = node->right;
+
+    node->right = node->left;
+    node->left = tempNode;
+
+    mirror(node->left);
+    mirror(node->right);
+}
+
 int main() {
     struct node* root = NewNode(4);
     insert(root, 2);
@@ -187,6 +199,10 @@ int main() {
     printf("\n");
 
     if (hasPathSum(root, 9)) printf("Tree has a root-to-leaf path that sums to 9\n");
+    printPaths(root);
+
+    printf("Paths after calling mirror:\n");
+    mirror(root);
     printPaths(root);
 
     return 0;
